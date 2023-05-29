@@ -853,11 +853,9 @@ class PlaybackManager {
                         user: user
                     });
 
-                    for (let i = 0; i < responses.length; i++) {
-                        const subTargets = responses[i];
-
-                        for (let j = 0; j < subTargets.length; j++) {
-                            targets.push(subTargets[j]);
+                    for (const subTargets of responses) {
+                        for (const subTarget of subTargets) {
+                            targets.push(subTarget);
                         }
                     }
 
@@ -2141,7 +2139,7 @@ class PlaybackManager {
         const getAdditionalParts = async (items) => {
             const getOneAdditionalPart = async function (item) {
                 let retVal = [item];
-                if (item.Type === 'Movie') {
+                if (item.Type === 'Movie' || item.Type === 'Episode') {
                     const client = ServerConnections.getApiClient(item.ServerId);
                     const user = await client.getCurrentUser();
                     const additionalParts = await client.getAdditionalVideoParts(user.Id, item.Id);
