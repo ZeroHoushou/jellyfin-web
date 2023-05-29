@@ -19,10 +19,12 @@ export default function (view, params, tabContent) {
             });
         });
     }
-
+    let MemoryResult;
     function shuffle() {
+        const ids = MemoryResult.Items.map(item => item.Id);
         ApiClient.getItem(ApiClient.getCurrentUserId(), params.topParentId).then(function (item) {
             getQuery();
+            item.albumids = ids;
             playbackManager.shuffle(item);
         });
     }
@@ -52,7 +54,7 @@ export default function (view, params, tabContent) {
             pageData.query.ParentId = params.topParentId;
             libraryBrowser.loadSavedQueryValues(key, pageData.query);
         }
-
+        
         return pageData;
     }
 
@@ -88,6 +90,7 @@ export default function (view, params, tabContent) {
         isLoading = true;
         const query = getQuery();
         ApiClient.getItems(ApiClient.getCurrentUserId(), query).then((result) => {
+            MemoryResult=result;
             function onNextPageClick() {
                 if (isLoading) {
                     return;

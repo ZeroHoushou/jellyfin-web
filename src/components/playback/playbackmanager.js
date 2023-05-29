@@ -1963,9 +1963,25 @@ class PlaybackManager {
             }
 
             if (options.items) {
+                // return translateItemsForPlayback(options.items, options)
+                //     .then((items) => getAdditionalParts(items))
+                //     .then(function (allItems) {
+                //         console.log("allitems: "+JSON.stringify(allItems));
+                //         const flattened = allItems.flatMap(i => i);
+                //         return playWithIntros(flattened, options);
+                //     });
                 return translateItemsForPlayback(options.items, options)
                     .then((items) => getAdditionalParts(items))
                     .then(function (allItems) {
+                        const { albumids } = options.items[0] || {};
+                       
+                        if(albumids){
+                            let FilterforAlbum = allItems.filter(([element]) =>
+                                albumids.includes(element.AlbumId)
+                            );
+                            const flattened = FilterforAlbum.flatMap(i => i);
+                            return playWithIntros(flattened, options);
+                        }
                         const flattened = allItems.flatMap(i => i);
                         return playWithIntros(flattened, options);
                     });
